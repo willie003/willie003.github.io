@@ -144,6 +144,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-分布式理论基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/26/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">分布式基础</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/26/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" class="archive-article-date">
+  	<time datetime="2021-01-25T16:52:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="分布式理论基础"><a href="#分布式理论基础" class="headerlink" title="分布式理论基础"></a>分布式理论基础</h2><p>分布式系统关注的三个指标：</p>
+<p>1、数据一致性。 Consistency</p>
+<p>2、系统可用性    Availability</p>
+<p>3、节点连通性与扩展性    Partition tolerance</p>
+<h3 id="CAP理论：一个分布式系统最多只能同时满足一致性、可用性和分区容忍性这三项中的两项。"><a href="#CAP理论：一个分布式系统最多只能同时满足一致性、可用性和分区容忍性这三项中的两项。" class="headerlink" title="CAP理论：一个分布式系统最多只能同时满足一致性、可用性和分区容忍性这三项中的两项。"></a>CAP理论：一个分布式系统最多只能同时满足一致性、可用性和分区容忍性这三项中的两项。</h3><p>分区容忍性：分布式系统出现消息丢失或者分区故障的时候，仍然能够继续运行，对外提供服务。（包括部分可用）</p>
+<p>可用性：每次请求都能获得一个（非错误）响应，但不保证返回的是最新写入的数据。</p>
+<p>一致性：所有节点同时看到相同的数据。</p>
+<h3 id="Base理论：基本可用"><a href="#Base理论：基本可用" class="headerlink" title="Base理论：基本可用"></a>Base理论：基本可用</h3><p>软状态：允许系统中的数据存在中间状态。</p>
+<p>最终一致性</p>
+<p>Base理论是在CAP理论基础上发展出来的，更贴近现实。在分区和副本存在的前提下，放弃强一致性，实现基本可用。</p>
+<h3 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h3><h4 id="Quorum选举算法"><a href="#Quorum选举算法" class="headerlink" title="Quorum选举算法"></a>Quorum选举算法</h4><p>基于抽屉原理，无法保证强一致性</p>
+<h4 id="Paxos的节点角色"><a href="#Paxos的节点角色" class="headerlink" title="Paxos的节点角色"></a>Paxos的节点角色</h4><p> Proposer</p>
+<p> Acceptor</p>
+<p> Learner</p>
+<h3 id="Zookeeper应用：数据发布和订阅、命名服务、配置中心、注册中心、分布式锁等"><a href="#Zookeeper应用：数据发布和订阅、命名服务、配置中心、注册中心、分布式锁等" class="headerlink" title="Zookeeper应用：数据发布和订阅、命名服务、配置中心、注册中心、分布式锁等"></a>Zookeeper应用：数据发布和订阅、命名服务、配置中心、注册中心、分布式锁等</h3><p>zk通过<strong>Zab协议</strong>来保证分布式事务的<strong>最终一致性</strong></p>
+<p>Zab原子广播协议，支持崩溃恢复</p>
+<p>Zab流程：消息广播、崩溃恢复、数据同步</p>
+<h3 id="区块链"><a href="#区块链" class="headerlink" title="区块链"></a>区块链</h3><p>本质：一个去中心化的数据库</p>
+<p>特点：去中心化、公开透明，作为分布式账本技术，每个节点都可以参与数据库的记录</p>
+<p>区块链的共识问题实际上是来源于<strong>分布式系统的一致性问题</strong>。</p>
+<p>挖矿：用计算机计算Hash值，随机碰撞解题</p>
+<h3 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h3><p>业务后台系统在系统上实现均可分为读业务、写业务、扣减业务。</p>
+<p>扣减业务要扛住并发和保障数据一致性。</p>
+<p><strong>拆分是架构设计大型复杂系统的第一步，对降低系统复杂性有着决定性的意义，它也是架构师的必备技能之一。</strong></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/26/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-我的第一篇博客文章" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -231,7 +317,7 @@
 
         
         <a href="/2021/01/22/hello-world/" class="archive-article-date">
-  	<time datetime="2021-01-22T14:50:35.525Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-22</time>
+  	<time datetime="2021-01-22T14:50:35.526Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-22</time>
 </a>
         
       </header>

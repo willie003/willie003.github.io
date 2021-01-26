@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Hello World | Hexo</title>
+  <title>服务调用 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="一、分布式浅谈RPC允许程序调用另一个地址空间的过程或函数，而不用程序员显式编码这个远程调用的细节。 发展阶段：Socket—RMI远程方法调用—Http+XML WebService—Http+JSON—RPC框架 RPC框架： 国内：Dubbo、DubboX、Motan等 ​                    国外：gRPC、Thrift等 二、Dubbo源码基础知识配置总线Protoco">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/2021/01/22/hello-world/index.html">
+<meta property="og:title" content="服务调用">
+<meta property="og:url" content="http://example.com/2021/01/26/%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="一、分布式浅谈RPC允许程序调用另一个地址空间的过程或函数，而不用程序员显式编码这个远程调用的细节。 发展阶段：Socket—RMI远程方法调用—Http+XML WebService—Http+JSON—RPC框架 RPC框架： 国内：Dubbo、DubboX、Motan等 ​                    国外：gRPC、Thrift等 二、Dubbo源码基础知识配置总线Protoco">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-22T14:50:35.526Z">
-<meta property="article:modified_time" content="2021-01-22T14:50:35.526Z">
+<meta property="article:published_time" content="2021-01-26T10:58:23.000Z">
+<meta property="article:modified_time" content="2021-01-26T10:59:07.886Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -146,35 +146,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hello-world" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-服务调用" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      服务调用
     </h1>
   
 
         
-        <a href="/2021/01/22/hello-world/" class="archive-article-date">
-  	<time datetime="2021-01-22T14:50:35.526Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-22</time>
+        <a href="/2021/01/26/%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2021-01-26T10:58:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+        <h2 id="一、分布式浅谈"><a href="#一、分布式浅谈" class="headerlink" title="一、分布式浅谈"></a>一、分布式浅谈</h2><h3 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h3><p>允许程序调用另一个地址空间的过程或函数，而不用程序员显式编码这个远程调用的细节。</p>
+<p>发展阶段：Socket—RMI远程方法调用—Http+XML WebService—Http+JSON—RPC框架</p>
+<p>RPC框架： 国内：Dubbo、DubboX、Motan等</p>
+<p>​                    国外：gRPC、Thrift等</p>
+<h2 id="二、Dubbo源码基础知识"><a href="#二、Dubbo源码基础知识" class="headerlink" title="二、Dubbo源码基础知识"></a>二、Dubbo源码基础知识</h2><h3 id="配置总线"><a href="#配置总线" class="headerlink" title="配置总线"></a>配置总线</h3><p>Protocol://username:password@host:port/path?key=value&amp;key=value</p>
+<p><strong>protocol</strong> ：URL的协议。我们常见的是HTTP协议和HTTPS协议。</p>
+<h3 id="OCP原则：对扩展开放，对修改封闭"><a href="#OCP原则：对扩展开放，对修改封闭" class="headerlink" title="OCP原则：对扩展开放，对修改封闭"></a>OCP原则：对扩展开放，对修改封闭</h3><p>Dubbo采用了<strong>“微内核+插件”</strong>的架构</p>
+<p>内核功能比较稳定，只负责管理插件的生命周期。功能上的扩展全部全部封装到插件之中，插件是独立存在的模块，能拓展内核系统的功能。</p>
+<p>Dubbo最终决定采用<strong>SPI机制</strong>来加载插件。</p>
+<p>JDK SPI(Service Provider Interface)主要是针对厂商、框架开发人员或者插件使用的一种技术。</p>
+<p>JDK SPI就是提供这样一个机制：为某个接口寻找服务实现的机制。有点类似IOC的思想，就是将装配的控制权移到程序之外，在模块化设计中这个机制尤其重要。</p>
+<p>JDK SPI机制虽然简单易用，但是也存在一些小瑕疵。</p>
+<p>JDK SPI在查找扩展实现类的过程中，需要遍历SPI配置文件中定义的所有实现类，该过程中会将这些实现类全部实例化。</p>
+<p>如果SPI配置文件中定义了多个实现类，而我们只需要使用其中一个实现类时，就会生成不必要的对象，导致资源浪费。</p>
+<h2 id="三、解析Dubbo注册中心"><a href="#三、解析Dubbo注册中心" class="headerlink" title="三、解析Dubbo注册中心"></a>三、解析Dubbo注册中心</h2><h3 id="Registry核心接口"><a href="#Registry核心接口" class="headerlink" title="Registry核心接口"></a>Registry核心接口</h3><p><strong>Node接口</strong></p>
+<p>Node接口抽象了节点的概念。它不仅可以表示Provider和Consumer节点，还可以表示注册中心节点。</p>
+<ul>
+<li>getUrl()方法返回表示当前节点的URL</li>
+<li>isAvailable()检测当前节点是否可用</li>
+<li>destroy()方法负责销毁当前节点并释放底层资源</li>
+</ul>
+<p><strong>RegistryService接口</strong></p>
+<p>RegistryService接口抽象了注册服务的基本行为。</p>
+<ul>
+<li>register()方法和unregister()方法分别表示<strong>注册</strong>和<strong>取消注册</strong>一个URL。</li>
+<li>subscribe()方法和unsubscribe()方法分别表示<strong>订阅</strong>和<strong>取消订阅</strong>一个URL。</li>
+<li>lookup()方法能够<strong>查询</strong>符合条件的注册数据，它与subscribe()方法有一定的区别，subscribe()方法采用的是push模式，lookup()方法采用的是pull模式。</li>
+</ul>
+<p><strong>Registry接口</strong></p>
+<p>Registry接口继承了RegistryService接口和Node接口。</p>
+<p>它表示的就是一个拥有注册中心能力的节点，其中的reExportRegister()和reExportUnregister()方法都是委托给RegistryService中的相应方法。</p>
+<h3 id="重试机制"><a href="#重试机制" class="headerlink" title="重试机制"></a>重试机制</h3><p><strong>在请求失败时，客户端重新发起一个一摸一样的请求，尝试调用相同或不同的服务端，完成相应的业务操作。</strong>能够使用重试机制的业务接口得是“幂等”的，也就是无论请求发送多少次，得到的结果都是一样的，例如查询操作。</p>
+<h3 id="ZooKeeper注册中心实现"><a href="#ZooKeeper注册中心实现" class="headerlink" title="ZooKeeper注册中心实现"></a>ZooKeeper注册中心实现</h3><p>Dubbo支持Zookeeper作为注册中心服务，这也是Dubbo推荐使用的注册中心。</p>
+<p><strong>Zookeeper是为分布式应用所设计的高可用且一致性的开源协调服务。</strong>它是一个树型的目录服务，支持变更推送，非常适合应用在生产环境中。</p>
 
       
 
@@ -264,7 +289,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/01/22/hello-world/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/01/26/%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -278,15 +303,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/01/22/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          我的第一篇博客文章
-        
-      </div>
-    </a>
   
+    <a href="/2021/01/26/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">分布式基础</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -327,14 +348,17 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 John Doe
+    		&copy; 2021
     	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
+      	  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
     </div>
   </div>
+  
+</span>
 </footer>
+
     </div>
     <script>
 	var yiliaConfig = {

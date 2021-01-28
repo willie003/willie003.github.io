@@ -144,6 +144,125 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-分布式缓存" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/01/28/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/">分布式缓存</a>
+    </h1>
+  
+
+        
+        <a href="/2021/01/28/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" class="archive-article-date">
+  	<time datetime="2021-01-28T10:56:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="分布式缓存浅谈"><a href="#分布式缓存浅谈" class="headerlink" title="分布式缓存浅谈"></a>分布式缓存浅谈</h1><h2 id="缓存的原理、引入"><a href="#缓存的原理、引入" class="headerlink" title="缓存的原理、引入"></a>缓存的原理、引入</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>缓存最初的定义，是指用于加速CPU数据交换的RAM，即随机存取存储器，通常这种存储器使用更昂贵但更快速的静态RAM技术，用以对DRAM进行加速。</p>
+<p>广义定义：任何可以用于数据高速交换的存储介质都是缓存，可以是硬件也可以是软件。</p>
+<h3 id="缓存的基本思想"><a href="#缓存的基本思想" class="headerlink" title="缓存的基本思想"></a>缓存的基本思想</h3><ul>
+<li>时间局限性原理</li>
+<li>以空间换时间</li>
+<li>性能成本Tradoff</li>
+</ul>
+<p>利用时间局限性原理，通过空间换时间来达到加速的目的。</p>
+<h3 id="缓存的优势"><a href="#缓存的优势" class="headerlink" title="缓存的优势"></a>缓存的优势</h3><ul>
+<li>提升访问性能</li>
+<li>降低网络拥堵</li>
+<li>减轻服务负载</li>
+<li>增强可扩展性</li>
+</ul>
+<h3 id="缓存的代价"><a href="#缓存的代价" class="headerlink" title="缓存的代价"></a>缓存的代价</h3><p>服务中引入缓存，会<strong>增加系统的复杂度</strong></p>
+<p>费用会更高</p>
+<p>多份数据会存在一致性问题</p>
+<h3 id="缓存的读写模式"><a href="#缓存的读写模式" class="headerlink" title="缓存的读写模式"></a>缓存的读写模式</h3><ul>
+<li>Cache Aside旁路缓存</li>
+<li>Read/Write Through 读写穿透</li>
+<li>Write Behind Caching 异步缓存写入</li>
+</ul>
+<h3 id="7大缓存经典问题"><a href="#7大缓存经典问题" class="headerlink" title="7大缓存经典问题"></a>7大缓存经典问题</h3><h4 id="1-缓存失效"><a href="#1-缓存失效" class="headerlink" title="1.缓存失效"></a>1.缓存失效</h4><p><strong>原因分析</strong><br>        在写缓存时，我们一般会根据业务的访问特点，给每种业务数据预置一个过期时间，在写缓存时把这个过期时间带上，让缓存数据在这个固定的过期时间后被淘汰。一般情况下，因为缓存数据是逐步写入的，所以也是逐步过期被淘汰的。但在某些场景，一大批数据会被系统主动或被动从 DB 批量加载，然后写入缓存。这些数据写入缓存时，由于使用相同的过期时间，在经历这个过期时间之后，这批数据就会一起到期，从而被缓存淘汰。此时，对这批数据的所有请求，都会出现缓存失效，从而都穿透到 DB，DB 由于查询量太大，就很容易压力大增，请求变慢。</p>
+<p><strong>解决方法</strong><br>        对于批量 key 缓存失效的问题，原因既然是预置的固定过期时间，那解决方案也从这里入手。设计缓存的过期时间时，使用公式：过期时间 = base 时间 + 随机时间。即相同业务数据写缓存时，在基础过期时间之上，再加一个随机的过期时间，让数据在未来一段时间内慢慢过期，避免瞬时全部过期，对 DB 造成过大压力。</p>
+<h4 id="2-缓存穿透"><a href="#2-缓存穿透" class="headerlink" title="2.缓存穿透"></a>2.缓存穿透</h4><p><strong>原因分析</strong><br>        缓存穿透存在的原因，就是因为我们在系统设计时，更多考虑的是正常访问路径，对特殊访问路径、异常访问路径考虑相对欠缺。<br>        但是如果用户访问的是一个不存在的 key，查 DB 返回空（即一个 NULL），那就不会把这个空写回 cache。那以后不管查询多少次这个不存在的 key，都会 cache miss，都会查询 DB。整个系统就会退化成一个 “前端 + DB“的系统，由于 DB 的吞吐只在 cache 的 1%~2% 以下，如果有特殊访客，大量访问这些不存在的 key，就会导致系统的性能严重退化，影响正常用户的访问。</p>
+<p><strong>解决方法</strong><br>        查询这些不存在的数据时，第一次查 DB，虽然没查到结果返回 NULL，仍然记录这个 key 到缓存，只是这个 key 对应的 value 是一个特殊设置的值。但是如果特殊访客持续访问大量的不存在的 key，这些 key 即便只存一个简单的默认值，也会占用大量的缓存空间，导致正常 key 的命中率下降。所以进一步的改进措施是，对这些不存在的 key 只存较短的时间，让它们尽快过期；或者将这些不存在的 key 存在一个独立的公共缓存，从缓存查找时，先查正常的缓存组件，如果 miss，则查一下公共的非法 key 的缓存，如果后者命中，直接返回，否则穿透 DB，如果查出来是空，则回种到非法 key 缓存，否则回种到正常缓存构建一个 BloomFilter 缓存过滤器，记录全量数据，这样访问数据时，可以直接通过 BloomFilter 判断这个 key 是否存在，如果不存在直接返回即可，根本无需查缓存和 DB。但是BloomFilter 要缓存全量的 key，这就要求全量的 key 数量不大，10 亿条数据以内最佳，因为 10 亿 条数据大概要占用 1.2GB 的内存。也可以用 BloomFilter 缓存非法 key，每次发现一个 key 是不存在的非法 key，就记录到 BloomFilter 中，这种记录方案，会导致 BloomFilter 存储的 key 持续高速增长，为了避免记录 key 太多而导致误判率增大，需要定期清零处理。</p>
+<h4 id="3-缓存雪崩"><a href="#3-缓存雪崩" class="headerlink" title="3.缓存雪崩"></a>3.缓存雪崩</h4><p><strong>原因分析</strong><br>缓存雪崩按照缓存是否 rehash（即是否漂移）分两种情况：</p>
+<p>​        缓存不支持 rehash 导致的系统雪崩不可用<br>​        缓存支持 rehash 导致的缓存雪崩不可用<br>​        在上述两种情况中，缓存不进行 rehash 时产生的雪崩，一般是由于较多缓存节点不可用，请求穿透导致 DB 也过载不可用，最终整个系统雪崩不可用的。而缓存支持 rehash 时产生的雪崩，则大多跟流量洪峰有关，流量洪峰到达，引发部分缓存节点过载 Crash，然后因 rehash 扩散到其他缓存节点，最终整个缓存体系异常。</p>
+<p><strong>解决方法</strong><br>        对业务 DB 的访问增加读写开关，当发现 DB 请求变慢、阻塞，慢请求超过阀值时，就会关闭读开关，部分或所有读 DB 的请求进行 failfast 立即返回，待 DB 恢复后再打开读开关。<br>        对缓存增加多个副本，缓存异常或请求 miss 后，再读取其他缓存副本，而且多个缓存副本尽量部署在不同机架，从而确保在任何情况下，缓存系统都会正常对外提供服务<br>        对缓存体系进行实时监控，当请求访问的慢速比超过阀值时，及时报警，通过机器替换、服务替换进行及时恢复；也可以通过各种自动故障转移策略，自动关闭异常接口、停止边缘服务、停止部分非核心功能措施，确保在极端场景下，核心功能的正常运行。</p>
+<h4 id="4-数据不一致"><a href="#4-数据不一致" class="headerlink" title="4.数据不一致"></a>4.数据不一致</h4><p><strong>原因分析</strong><br>        不一致的问题大多跟缓存更新异常有关。比如更新 DB 后，写缓存失败，从而导致缓存中存的是老数据。另外，如果系统采用一致性 Hash 分布，同时采用 rehash 自动漂移策略，在节点多次上下线之后，也会产生脏数据。缓存有多个副本时，更新某个副本失败，也会导致这个副本的数据是老数据。</p>
+<p><strong>解决方案</strong><br>        cache 更新失败后，可以进行重试，如果重试失败，则将失败的 key 写入队列机服务，待缓存访问恢复后，将这些 key 从缓存删除。这些 key 在再次被查询时，重新从 DB 加载，从而保证数据的一致性。<br>缓存时间适当调短，让缓存数据及早过期后，然后从 DB 重新加载，确保数据的最终一致性。<br>        不采用 rehash 漂移策略，而采用缓存分层策略，尽量避免脏数据产生。</p>
+<h4 id="5-数据并发竞争"><a href="#5-数据并发竞争" class="headerlink" title="5.数据并发竞争"></a>5.数据并发竞争</h4><p><strong>原因分析</strong><br>        数据并发竞争，主要是由于多个进程 / 线程中，有大量并发请求获取相同的数据，而这个数据 key 因为正好过期、被剔除等各种原因在缓存中不存在，这些进程 / 线程之间没有任何协调，然后一起并发查询 DB，请求那个相同的 key，最终导致 DB 压力大增。</p>
+<p><strong>解决方法</strong><br>        全局锁。即当缓存请求 miss 后，先尝试加全局锁，只有加全局锁成功的线程，才可以到 DB 去加载数据。其他进程 / 线程在读取缓存数据 miss 时，如果发现这个 key 有全局锁，就进行等待，待之前的线程将数据从 DB 回种到缓存后，再从缓存获取。<br>        对缓存数据保持多个备份，即便其中一个备份中的数据过期或被剔除了，还可以访问其他备份，从而减少数据并发竞争的情况。</p>
+<h4 id="6-Hot-key"><a href="#6-Hot-key" class="headerlink" title="6.Hot key"></a>6.Hot key</h4><p><strong>原因分析</strong><br>        Hot key 引发缓存系统异常，主要是因为数十万、数百万的用户同时请求同一个 key，流量集中打在一个缓存节点机器，这个缓存机器很容易被打到物理网卡、带宽、CPU 的极限，从而导致缓存访问变慢、卡顿。</p>
+<p><strong>解决方案</strong><br>        找到对应的热点 key，将这些热 key 进行分散处理，比如一个热 key 名字叫 hotkey，可以被分散为 hotkey#1、hotkey#2、hotkey#3，……hotkey#n，这 n 个 key 分散存在多个缓存节点，然后 client 端请求时，随机访问其中某个后缀的 hotkey，这样就可以把热 key 的请求打散，避免一个缓存节点过载。也可以 key 的名字不变，对缓存提前进行多副本 + 多级结合的缓存架构设计。再次，如果热 key 较多，还可以通过监控体系对缓存的 SLA 实时监控，通过快速扩容来减少热 key 的冲击。最后，业务端还可以使用本地缓存，将这些热 key 记录在本地缓存，来减少对远程缓存的冲击。</p>
+<h4 id="7-Big-Key"><a href="#7-Big-Key" class="headerlink" title="7.Big Key"></a>7.Big Key</h4><p><strong>原因分析</strong><br>        造成这些大 key 慢查询的原因很多。如果这些大 key 占总体数据的比例很小，存 Mc，对应的 slab 较少，导致很容易被频繁剔除，DB 反复加载，从而导致查询较慢。如果业务中这种大 key 很多，而这种 key 被大量访问，缓存组件的网卡、带宽很容易被打满，也会导致较多的大 key 慢查询。另外，如果大 key 缓存的字段较多，每个字段的变更都会引发对这个缓存数据的变更，同时这些 key 也会被频繁地读取，读写相互影响，也会导致慢查现象。最后，大 key 一旦被缓存淘汰，DB 加载可能需要花费很多时间，这也会导致大 key 查询慢的问题。</p>
+<p><strong>解决方案</strong><br>        如果数据存在 Mc 中，可以设计一个缓存阀值，当 value 的长度超过阀值，则对内容启用压缩，让 KV 尽量保持小的 size，其次评估大 key 所占的比例，在 Mc 启动之初，就立即预写足够数据的大 key，让 Mc 预先分配足够多的 trunk size 较大的 slab。确保后面系统运行时，大 key 有足够的空间来进行缓存。</p>
+<p>​        如果数据存在 Redis 中，比如业务数据存 set 格式，大 key 对应的 set 结构有几千几万个元素，这种写入 Redis 时会消耗很长的时间，导致 Redis 卡顿。此时，可以扩展新的数据结构，同时让 client 在这些大 key 写缓存之前，进行序列化构建，然后通过 restore 一次性写入。</p>
+<p>​        将大 key 分拆为多个 key，尽量减少大 key 的存在。同时由于大 key 一旦穿透到 DB，加载耗时很大，所以可以对这些大 key 进行特殊照顾，比如设置较长的过期时间，比如缓存内部在淘汰 key 时，同等条件下，尽量不淘汰这些大 key。</p>
+<p>本作品采用《CC 协议》，转载必须注明作者和本文链接</p>
+<p>————————————————<br>原文作者：CrazyZard<br>转自链接：<a target="_blank" rel="noopener" href="https://learnku.com/articles/46510">https://learnku.com/articles/46510</a><br>版权声明：著作权归作者所有。商业转载请联系作者获得授权，非商业转载请保留以上作者信息和原文链接。</p>
+<h3 id="Memcached-原理及特性"><a href="#Memcached-原理及特性" class="headerlink" title="Memcached 原理及特性"></a>Memcached 原理及特性</h3><p>Memcached是一个高性能的分布式内存对象缓存系统，用于动态Web应用以减轻数据库负载。</p>
+<p>它通过在内存中缓存数据和对象来减少读取数据库的次数，从而提高动态、数据库驱动网站的速度。</p>
+<p>其守护进程是用C写的，但是客户端可以用任何语言来编写，并通过mamcached协议与守护进程通信。</p>
+<p><strong>特性</strong></p>
+<ul>
+<li><p>高性能，单节点压测性能达到<em>百万级的QPS</em>。</p>
+</li>
+<li><p>访问协议很简单，只有get/set/cas/touch/gat/stats等有限的几个命令。</p>
+</li>
+<li><p>存储结构很简单，值存储简单的key/value键值对，而且对value直接以二进制方式存储，不识别内部存储结构，所以有限几个指令就可以满足操作需要。</p>
+</li>
+<li><p>完全基于内存操作，在系统运行期间，在有新key写进来时，如果没有空闲内存分配，就会对最不活跃的key进行eviction剔除操作。</p>
+</li>
+<li><p>服务节点运行简单，不同节点之间互不通信，由client自行负责管理数据分布。</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/01/28/%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-服务调用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
